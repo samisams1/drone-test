@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>RC Corner - Live Drone Command Center</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #111; color: #fff; padding: 30px; }
+    .card { background: #1e1e1e; padding: 20px; border-radius: 10px; max-width: 450px; }
+    .value { font-size: 22px; color: #00ffcc; font-weight: bold; }
+    button { background: #ff4444; color: white; border: none; padding: 12px 20px; 
+             font-size: 16px; border-radius: 6px; cursor: pointer; margin-top: 15px; }
+  </style>
+</head>
+<body>
+  <h2>🚁 RC Corner Live Drone Telemetry</h2>
+  <div class="card">
+    <p>Drone ID: <span id="droneId" class="value">Waiting...</span></p>
+    <p>GPS Latitude: <span id="lat" class="value">--</span></p>
+    <p>GPS Longitude: <span id="lng" class="value">--</span></p>
+    <p>Battery: <span id="battery" class="value">--</span>%</p>
+    <p>Wind Speed: <span id="wind" class="value">--</span> m/s</p>
+    <button onclick="sendRTH()">⚠️ Send Return-To-Home Command</button>
+  </div>
+
+  <script>
+    const ws = new WebSocket('ws://localhost:3000');
+
+    ws.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+      document.getElementById('droneId').innerText = data.droneId;
+      document.getElementById('lat').innerText = data.gps.lat;
+      document.getElementById('lng').innerText = data.gps.lng;
+      document.getElementById('battery').innerText = data.battery_percent;
+      document.getElementById('wind').innerText = data.wind_speed_ms;
+    };
+
+    function sendRTH() {
+      ws.send('RETURN_TO_HOME_NOW');
+    }
+  </script>
+</body>
+</html>
