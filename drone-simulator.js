@@ -1,9 +1,4 @@
 const mqtt = require('mqtt');
-
-/*const DRONE_CONFIG = {
-  brokerUrl: 'mqtt://127.0.0.1:1883',
-  topicPrefix: 'samson/dji/dock01'
-};*/
 const DRONE_CONFIG = {
   brokerUrl: process.env.MQTT_BROKER_URL || 'mqtt://127.0.0.1:1883',
   topicPrefix: 'samson/dji/dock01'
